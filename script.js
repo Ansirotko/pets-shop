@@ -97,15 +97,26 @@ function makeCardByTemplate(title, description, img, price, tags) {
     myCard.querySelector('p').textContent = description;
     myCard.querySelector('img').src = img;
     myCard.querySelector('.price').textContent = `${price} P`;
-    myCard.querySelector('.tags').textContent = tags.join(', ');
+
+    const tagsContainer = myCard.querySelector('.tags');
+
+    tags.forEach((tag) => {
+        const element = document.createElement("span");
+        element.textContent = tag;
+        element.classList.add("tag");
+        tagsContainer.append(element);
+    });
 
     return myCard;
 }
 
-items.forEach(item => {
-    const card = makeCardByTemplate(item.title, item.description, item.img, item.price, item.tags);
-    container.append(card);
-});
+function renderItems(items) {
+    items.forEach(item => {
+        const card = makeCardByTemplate(item.title, item.description, item.img, item.price, item.tags);
+        container.append(card);
+    });
+}
+renderItems(items);
 
 button.addEventListener('click', () => {
     const searchTerm = input.value.trim().toLowerCase();
@@ -115,10 +126,7 @@ button.addEventListener('click', () => {
     const filteredItems = items.filter(item => item.title.toLowerCase().includes(searchTerm));
 
     if (filteredItems.length > 0) {
-        filteredItems.forEach(item => {
-            const card = makeCardByTemplate(item.title, item.description, item.img, item.price, item.tags);
-            container.append(card);
-        });
+        renderItems(filteredItems);
     } else {
         nothing.textContent = 'Ничего не найдено';
     }
